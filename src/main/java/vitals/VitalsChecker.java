@@ -1,37 +1,32 @@
 package vitals;
 
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class VitalsChecker {
-  static boolean vitalsOk(float temperature, float pulseRate, float spo2) 
-      throws InterruptedException {
-    if (temperature > 102 || temperature < 95) {
-      System.out.println("Temperature is critical!");
-      for (int i = 0; i < 6; i++) {
-        System.out.print("\r* ");
-        Thread.sleep(1000);
-        System.out.print("\r *");
-        Thread.sleep(1000);
-      }
-      return false;
-    } else if (pulseRate < 60 || pulseRate > 100) {
-      System.out.println("Pulse Rate is out of range!");
-      for (int i = 0; i < 6; i++) {
-        System.out.print("\r* ");
-        Thread.sleep(1000);
-        System.out.print("\r *");
-        Thread.sleep(1000);
-      }
-      return false;
-    } else if (spo2 < 90) {
-      System.out.println("Oxygen Saturation out of range!");
-      for (int i = 0; i < 6; i++) {
-        System.out.print("\r* ");
-        Thread.sleep(1000);
-        System.out.print("\r *");
-        Thread.sleep(1000);
-      }
-      return false;
+  static List<String> vitalsOk(float temperature, float pulseRate, float spo2) throws InterruptedException {
+    List<String> healthIssues = new ArrayList<>(); 
+    if (!isTemperatureOk(temperature)) {
+      healthIssues.add("Temperature is critical!");
     }
-    return true;
+    if (!isPulseRateOk(pulseRate)) {
+      healthIssues.add("Pulse Rate is out of range!");
+    }
+    if (!isSpo2Ok(spo2)) {
+      healthIssues.add("Oxygen Saturation out of range!");
+    }
+    return healthIssues;
+  }
+
+  private static boolean isTemperatureOk(float temperature) {
+    return temperature >= 95 && temperature <= 102;
+  }
+
+  private static boolean isPulseRateOk(float pulseRate) {
+    return pulseRate >= 60 && pulseRate <= 100;
+  }
+
+  private static boolean isSpo2Ok(float spo2) {
+    return spo2 >= 90;
   }
 }
